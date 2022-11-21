@@ -13,7 +13,7 @@ def get_all_task_instances(request):
     serializer = TaskInstanceSerializer(tasks, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
 def user_task_instances(request):
     if request.method == 'GET':
@@ -21,3 +21,10 @@ def user_task_instances(request):
         user_task_instances = TaskInstance.objects.filter(user_id=request.user.id)
         serializer = TaskInstanceSerializer(user_task_instances, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    elif request.method == 'POST':
+       
+        serializer = TaskInstanceSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(user = request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
