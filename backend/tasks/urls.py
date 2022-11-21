@@ -3,4 +3,5 @@ from tasks import views
 
 urlpatterns = [
     path('all', views.get_all_tasks),
+    path('userTasks', views.user_tasks),
 ]
