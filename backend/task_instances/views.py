@@ -22,9 +22,22 @@ def user_task_instances(request):
         serializer = TaskInstanceSerializer(user_task_instances, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     elif request.method == 'POST':
-       
         serializer = TaskInstanceSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(user = request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['PUT', 'DELETE'])
+@permission_classes([IsAuthenticated])
+def change_user_task_instances(request, pk):
+    task_instance = get_object_or_404(TaskInstance, pk=pk)
+    if request.method == 'PUT':
+        serializer = TaskInstanceSerializer(task_instance, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status= status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    if request.method == 'DELETE':
+        task_instance.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
