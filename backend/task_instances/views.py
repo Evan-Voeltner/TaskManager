@@ -41,3 +41,10 @@ def change_user_task_instances(request, pk):
     if request.method == 'DELETE':
         task_instance.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_task_instances_by_task(request, pk):
+        user_task_instances = TaskInstance.objects.filter(task_id=pk)
+        serializer = TaskInstanceSerializer(user_task_instances, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
