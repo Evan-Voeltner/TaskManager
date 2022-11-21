@@ -1,7 +1,13 @@
 import React, { useState } from "react";
+import CreateTaskForm from "../../components/CreateTaskForm/CreateTaskForm";
 
 const NewTaskPage = (props) => {
-  return <div></div>;
+  return (
+    <div>
+      <h1>Enter a new task</h1>
+      <CreateTaskForm />
+    </div>
+  );
 };
 
 export default NewTaskPage;
