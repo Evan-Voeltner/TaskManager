@@ -41,3 +41,10 @@ def change_user_tasks(request, pk):
     if request.method == 'DELETE':
         task.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_most_recent_task(request):
+    user_tasks = Task.objects.filter(user_id=request.user.id).latest('id')
+    serializer = TaskSerializer(user_tasks, many=False)
+    return Response(serializer.data, status=status.HTTP_200_OK)

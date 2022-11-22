@@ -33,6 +33,18 @@ function App() {
       console.log(error.message);
     }
   }
+  async function postNewTaskInstance(newTaskInstance) {
+    console.log("Task to POST", newTaskInstance)
+    try {
+      let respone = await axios.post(
+        `http://127.0.0.1:8000/api/taskInstances/userTaskInstances/`,
+        newTaskInstance,
+        { headers: { Authorization: "Bearer " + token } }
+      );
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
 
   return (
     <div>
