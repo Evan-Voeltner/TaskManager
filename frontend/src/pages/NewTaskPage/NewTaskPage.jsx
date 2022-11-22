@@ -5,7 +5,7 @@ const NewTaskPage = (props) => {
   return (
     <div>
       <h1>Enter a new task</h1>
-      <CreateTaskForm />
+      <CreateTaskForm postNewTask={props.postNewTask}/>
     </div>
   );
 };

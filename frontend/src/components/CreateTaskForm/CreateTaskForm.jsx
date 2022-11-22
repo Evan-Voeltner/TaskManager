@@ -50,12 +50,15 @@ const CreateTaskForm = (props) => {
       }
     }
     console.log(finalPattern)
+    
     let newTask = {
       name: name,
       is_recurring: isRecurring,
       recurring_pattern: finalPattern,
       importance: importance,
     };
+
+    props.postNewTask(newTask);
   }
 
   return (

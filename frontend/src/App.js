@@ -1,6 +1,8 @@
 // General Imports
 import { Routes, Route } from "react-router-dom";
 import "./App.css";
+import axios from "axios";
+import useAuth from "./hooks/useAuth";
 
 // Pages Imports
 import HomePage from "./pages/HomePage/HomePage";
@@ -17,6 +19,21 @@ import Footer from "./components/Footer/Footer";
 import PrivateRoute from "./utils/PrivateRoute";
 
 function App() {
+  const [user, token] = useAuth();
+
+  async function postNewTask(newTask) {
+    console.log("Task to POST", newTask)
+    try {
+      let respone = await axios.post(
+        `http://127.0.0.1:8000/api/tasks/userTasks/`,
+        newTask,
+        { headers: { Authorization: "Bearer " + token } }
+      );
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
   return (
     <div>
       <Navbar />
@@ -32,7 +49,7 @@ function App() {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/main" element={<MainPage />} />
-        <Route path="/new" element={<NewTaskPage />} />
+        <Route path="/new" element={<NewTaskPage postNewTask={postNewTask}/>} />
       </Routes>
       <Footer />
     </div>
