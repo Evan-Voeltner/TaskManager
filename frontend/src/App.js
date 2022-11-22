@@ -22,19 +22,32 @@ function App() {
   const [user, token] = useAuth();
 
   async function postNewTask(newTask) {
-    console.log("Task to POST", newTask)
+    console.log("Task to POST", newTask);
     try {
-      let respone = await axios.post(
+      let response = await axios.post(
         `http://127.0.0.1:8000/api/tasks/userTasks/`,
         newTask,
         { headers: { Authorization: "Bearer " + token } }
       );
+      console.log(response);
+      createTaskInstances(response.data);
     } catch (error) {
       console.log(error.message);
     }
   }
+
+  function createTaskInstances(refrenceTask){
+    let newTaskInstance = {
+      task_id: refrenceTask.id,
+      name: refrenceTask.name,
+      date_to_be_completed: refrenceTask.recurring_pattern.Date,
+      is_completed: false,
+    }
+    postNewTaskInstance(newTaskInstance);
+  }
+
   async function postNewTaskInstance(newTaskInstance) {
-    console.log("Task to POST", newTaskInstance)
+    console.log("TaskInstance to POST", newTaskInstance);
     try {
       let respone = await axios.post(
         `http://127.0.0.1:8000/api/taskInstances/userTaskInstances/`,
@@ -61,7 +74,10 @@ function App() {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/main" element={<MainPage />} />
-        <Route path="/new" element={<NewTaskPage postNewTask={postNewTask}/>} />
+        <Route
+          path="/new"
+          element={<NewTaskPage postNewTask={postNewTask} />}
+        />
       </Routes>
       <Footer />
     </div>
