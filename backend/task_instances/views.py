@@ -28,6 +28,12 @@ def user_task_instances(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def create_task_instances(request):
+
+    print(request.data)
+
 @api_view(['PUT', 'DELETE'])
 @permission_classes([IsAuthenticated])
 def change_user_task_instances(request, pk):

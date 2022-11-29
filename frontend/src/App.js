@@ -17,9 +17,16 @@ import Footer from "./components/Footer/Footer";
 
 // Util Imports
 import PrivateRoute from "./utils/PrivateRoute";
+import { useEffect, useState } from "react";
 
 function App() {
   const [user, token] = useAuth();
+  const [currentDate, setCurrentDate] = useState(new Date(2022, 10, 28));
+
+  useEffect(() => {
+    console.log(currentDate);
+  });
+
 
   async function postNewTask(newTask) {
     console.log("Task to POST", newTask);
@@ -37,23 +44,69 @@ function App() {
   }
 
   function createTaskInstances(refrenceTask){
-    let newTaskInstance = {
-      task_id: refrenceTask.id,
-      name: refrenceTask.name,
-      date_to_be_completed: refrenceTask.recurring_pattern.Date,
-      is_completed: false,
+    if(refrenceTask.is_recurring){
+      if(refrenceTask.recurring_pattern.type === 1){
+        createDailyTaskInstances(refrenceTask);
+      }
+      else if(refrenceTask.recurring_pattern.type === 2){
+        createWeeklyTaskInstances(refrenceTask);
+      }
+      else if(refrenceTask.recurring_pattern.type === 3){
+        createMonthlyTaskInstances(refrenceTask);
+      }
     }
-    postNewTaskInstance(newTaskInstance);
+    else{
+      let newTaskInstance = {
+        task_id: refrenceTask.id,
+        name: refrenceTask.name,
+        date_to_be_completed: refrenceTask.recurring_pattern.Date,
+        is_completed: false,
+      }
+      postNewTaskInstance(newTaskInstance);
+    }
+
+    
+  }
+
+  async function createDailyTaskInstances(refrenceTask){
+    
+  }
+
+  async function createWeeklyTaskInstances(refrenceTask){
+
+  }
+
+  async function createMonthlyTaskInstances(refrenceTask){
+    let currentMonth = currentDate.getMonth() ;
+    let finalDate;
+    
+    for (let i = 0; i < 12; i++) {
+      if(currentMonth == 12){
+        currentMonth = 1;
+      }
+      finalDate = new Date(currentDate.getFullYear(), currentMonth, 0);
+
+      let newTaskInstance = {
+        task_id: refrenceTask.id,
+        name: refrenceTask.name,
+        date_to_be_completed: finalDate.toJSON().slice(0, 10),
+        is_completed: false,
+      }
+
+      await postNewTaskInstance(newTaskInstance);
+      currentMonth++;
+    }
   }
 
   async function postNewTaskInstance(newTaskInstance) {
     console.log("TaskInstance to POST", newTaskInstance);
     try {
-      let respone = await axios.post(
+      let response = await axios.post(
         `http://127.0.0.1:8000/api/taskInstances/userTaskInstances/`,
         newTaskInstance,
         { headers: { Authorization: "Bearer " + token } }
       );
+      console.log(response);
     } catch (error) {
       console.log(error.message);
     }

@@ -19,33 +19,25 @@ const CreateTaskForm = (props) => {
 
     if(recurringPattern === '0'){
       finalPattern = {
-        Months: [0],
-        Weeks: [0],
-        Days: [0],
+        type: 0,
         Date: date,
       }
     }
     else if(recurringPattern === '1'){
       finalPattern = {
-        Months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-        Weeks: [1, 2, 3, 4],
-        Days: [1, 2, 3, 4, 5, 6, 7],
+        type: 1,
         Date: date,
       }
     }
     else if(recurringPattern === '2'){
       finalPattern = {
-        Months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-        Weeks: [1, 2, 3, 4],
-        Days: [0],
+        type: 2,
         Date: date,
       }
     }
     else if(recurringPattern === '3'){
       finalPattern = {
-        Months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-        Weeks: [0],
-        Days: [0],
+        type: 3,
         Date: date,
       }
     }
