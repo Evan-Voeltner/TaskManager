@@ -21,7 +21,7 @@ import { useEffect, useState } from "react";
 
 function App() {
   const [user, token] = useAuth();
-  const [currentDate, setCurrentDate] = useState(new Date(2022, 10, 28));
+  const [currentDate, setCurrentDate] = useState(new Date(2022, 10, 29));
 
   useEffect(() => {
     console.log(currentDate);
@@ -69,7 +69,30 @@ function App() {
   }
 
   async function createDailyTaskInstances(refrenceTask){
-    
+    let currentYear = currentDate.getFullYear() ;
+    let currentMonth = currentDate.getMonth();
+    let currentDay = currentDate.getDate();
+    let finalDate;
+    let totalDaysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+    console.log(totalDaysInMonth);
+    console.log(currentDay);
+  
+    for (let i = currentDay; i <= totalDaysInMonth; i++) {
+      
+      finalDate = new Date(currentYear, currentMonth, currentDay);
+
+      let newTaskInstance = {
+        task_id: refrenceTask.id,
+        name: refrenceTask.name,
+        date_to_be_completed: finalDate.toJSON().slice(0, 10),
+        is_completed: false,
+      }
+
+      await postNewTaskInstance(newTaskInstance);
+      currentDay++;
+
+    }
+
   }
 
   async function createWeeklyTaskInstances(refrenceTask){
@@ -78,13 +101,15 @@ function App() {
 
   async function createMonthlyTaskInstances(refrenceTask){
     let currentMonth = currentDate.getMonth() ;
+    let currentYear = currentDate.getFullYear() ;
     let finalDate;
     
     for (let i = 0; i < 12; i++) {
       if(currentMonth == 12){
-        currentMonth = 1;
+        currentMonth = 0;
+        currentYear++;
       }
-      finalDate = new Date(currentDate.getFullYear(), currentMonth, 0);
+      finalDate = new Date(currentYear, currentMonth + 1, 0);
 
       let newTaskInstance = {
         task_id: refrenceTask.id,
