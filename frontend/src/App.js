@@ -22,11 +22,24 @@ import { useEffect, useState } from "react";
 function App() {
   const [user, token] = useAuth();
   const [currentDate, setCurrentDate] = useState(new Date(2022, 10, 29));
+  const [taskInstances, setTaskInstances] = useState([]);
 
   useEffect(() => {
-    console.log(currentDate);
+    // console.log(currentDate);
+    getAllTaskInstances()
   });
 
+  async function getAllTaskInstances() {
+    try {
+      let response = await axios.get(
+        "http://127.0.0.1:8000/api/taskInstances/userTaskInstances/",
+        { headers: { Authorization: "Bearer " + token } }
+      );
+      setTaskInstances(response.data);
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
 
   async function postNewTask(newTask) {
     console.log("Task to POST", newTask);
@@ -43,42 +56,36 @@ function App() {
     }
   }
 
-  function createTaskInstances(refrenceTask){
-    if(refrenceTask.is_recurring){
-      if(refrenceTask.recurring_pattern.type === 1){
+  function createTaskInstances(refrenceTask) {
+    if (refrenceTask.is_recurring) {
+      if (refrenceTask.recurring_pattern.type === 1) {
         createDailyTaskInstances(refrenceTask);
-      }
-      else if(refrenceTask.recurring_pattern.type === 2){
+      } else if (refrenceTask.recurring_pattern.type === 2) {
         createWeeklyTaskInstances(refrenceTask);
-      }
-      else if(refrenceTask.recurring_pattern.type === 3){
+      } else if (refrenceTask.recurring_pattern.type === 3) {
         createMonthlyTaskInstances(refrenceTask);
       }
-    }
-    else{
+    } else {
       let newTaskInstance = {
         task_id: refrenceTask.id,
         name: refrenceTask.name,
         date_to_be_completed: refrenceTask.recurring_pattern.Date,
         is_completed: false,
-      }
+      };
       postNewTaskInstance(newTaskInstance);
     }
-
-    
   }
 
-  async function createDailyTaskInstances(refrenceTask){
-    let currentYear = currentDate.getFullYear() ;
+  async function createDailyTaskInstances(refrenceTask) {
+    let currentYear = currentDate.getFullYear();
     let currentMonth = currentDate.getMonth();
     let currentDay = currentDate.getDate();
     let finalDate;
     let totalDaysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
     console.log(totalDaysInMonth);
     console.log(currentDay);
-  
+
     for (let i = currentDay; i <= totalDaysInMonth; i++) {
-      
       finalDate = new Date(currentYear, currentMonth, currentDay);
 
       let newTaskInstance = {
@@ -86,46 +93,43 @@ function App() {
         name: refrenceTask.name,
         date_to_be_completed: finalDate.toJSON().slice(0, 10),
         is_completed: false,
-      }
+      };
 
       await postNewTaskInstance(newTaskInstance);
       currentDay++;
-
     }
-
   }
 
-  async function createWeeklyTaskInstances(refrenceTask){
+  async function createWeeklyTaskInstances(refrenceTask) {
     let presentDate = new Date();
-    let currentMonth = presentDate.getMonth() ;
-    let currentYear = presentDate.getFullYear() ;
+    let currentMonth = presentDate.getMonth();
+    let currentYear = presentDate.getFullYear();
     let totalDaysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
     let finalDate;
-    
+
     for (let i = 1; i <= totalDaysInMonth; i++) {
-      let finalDate =new Date(currentYear, currentMonth, i);
+      let finalDate = new Date(currentYear, currentMonth, i);
 
       let newTaskInstance = {
         task_id: refrenceTask.id,
         name: refrenceTask.name,
         date_to_be_completed: finalDate.toJSON().slice(0, 10),
         is_completed: false,
-      }
+      };
 
-      if(finalDate.getDay() === 6){
+      if (finalDate.getDay() === 6) {
         await postNewTaskInstance(newTaskInstance);
       }
-      
     }
   }
 
-  async function createMonthlyTaskInstances(refrenceTask){
-    let currentMonth = currentDate.getMonth() ;
-    let currentYear = currentDate.getFullYear() ;
+  async function createMonthlyTaskInstances(refrenceTask) {
+    let currentMonth = currentDate.getMonth();
+    let currentYear = currentDate.getFullYear();
     let finalDate;
-    
+
     for (let i = 0; i < 12; i++) {
-      if(currentMonth == 12){
+      if (currentMonth == 12) {
         currentMonth = 0;
         currentYear++;
       }
@@ -136,7 +140,7 @@ function App() {
         name: refrenceTask.name,
         date_to_be_completed: finalDate.toJSON().slice(0, 10),
         is_completed: false,
-      }
+      };
 
       await postNewTaskInstance(newTaskInstance);
       currentMonth++;
@@ -171,7 +175,10 @@ function App() {
         />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/main" element={<MainPage />} />
+        <Route
+          path="/main"
+          element={<MainPage taskInstances={taskInstances} />}
+        />
         <Route
           path="/new"
           element={<NewTaskPage postNewTask={postNewTask} />}

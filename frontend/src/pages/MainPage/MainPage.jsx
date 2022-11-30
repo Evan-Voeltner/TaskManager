@@ -1,9 +1,10 @@
 import React, { useState } from "react";
+import TaskTable from "../../components/TaskTable/TaskTable";
 
 const MainPage = (props) => {
   return (
     <div>
-      <h1>Hello</h1>
+      <TaskTable taskInstances={props.taskInstances}/>
     </div>
   );
 };
