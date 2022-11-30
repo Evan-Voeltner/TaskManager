@@ -96,7 +96,27 @@ function App() {
   }
 
   async function createWeeklyTaskInstances(refrenceTask){
+    let presentDate = new Date();
+    let currentMonth = presentDate.getMonth() ;
+    let currentYear = presentDate.getFullYear() ;
+    let totalDaysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+    let finalDate;
+    
+    for (let i = 1; i <= totalDaysInMonth; i++) {
+      let finalDate =new Date(currentYear, currentMonth, i);
 
+      let newTaskInstance = {
+        task_id: refrenceTask.id,
+        name: refrenceTask.name,
+        date_to_be_completed: finalDate.toJSON().slice(0, 10),
+        is_completed: false,
+      }
+
+      if(finalDate.getDay() === 6){
+        await postNewTaskInstance(newTaskInstance);
+      }
+      
+    }
   }
 
   async function createMonthlyTaskInstances(refrenceTask){
