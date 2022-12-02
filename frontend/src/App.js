@@ -21,13 +21,11 @@ import { useEffect, useState } from "react";
 
 function App() {
   const [user, token] = useAuth();
-  const [currentDate, setCurrentDate] = useState(new Date(2022, 10, 29));
   const [taskInstances, setTaskInstances] = useState([]);
 
   useEffect(() => {
-    // console.log(currentDate);
     getAllTaskInstances()
-  });
+  }, []);
 
   async function getAllTaskInstances() {
     try {
@@ -77,9 +75,10 @@ function App() {
   }
 
   async function createDailyTaskInstances(refrenceTask) {
-    let currentYear = currentDate.getFullYear();
-    let currentMonth = currentDate.getMonth();
-    let currentDay = currentDate.getDate();
+    let presentDate = new Date();
+    let currentYear = presentDate.getFullYear();
+    let currentMonth = presentDate.getMonth();
+    let currentDay = presentDate.getDate();
     let finalDate;
     let totalDaysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
     console.log(totalDaysInMonth);
@@ -124,8 +123,9 @@ function App() {
   }
 
   async function createMonthlyTaskInstances(refrenceTask) {
-    let currentMonth = currentDate.getMonth();
-    let currentYear = currentDate.getFullYear();
+    let presentDate = new Date();
+    let currentMonth = presentDate.getMonth();
+    let currentYear = presentDate.getFullYear();
     let finalDate;
 
     for (let i = 0; i < 12; i++) {
@@ -139,11 +139,39 @@ function App() {
         task_id: refrenceTask.id,
         name: refrenceTask.name,
         date_to_be_completed: finalDate.toJSON().slice(0, 10),
+        importance: refrenceTask.importance,
+        recurring_pattern: 3,
         is_completed: false,
       };
 
       await postNewTaskInstance(newTaskInstance);
       currentMonth++;
+    }
+  }
+
+  async function updateTaskInstance(updatedTaskInstance) {
+    console.log("TaskInstance to Update", updatedTaskInstance);
+    try {
+      let response = await axios.put(
+        `http://127.0.0.1:8000/api/taskInstances/userTaskInstances/${updatedTaskInstance.id}/`,
+        updatedTaskInstance,
+        { headers: { Authorization: "Bearer " + token } }
+      );
+      console.log(response);
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
+  async function getTaskInstance(pk) {
+    try {
+      let response = await axios.get(
+        "http://127.0.0.1:8000/api/taskInstances/userTaskInstances/",
+        { headers: { Authorization: "Bearer " + token } }
+      );
+      setTaskInstances(response.data);
+    } catch (error) {
+      console.log(error.message);
     }
   }
 
@@ -177,7 +205,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route
           path="/main"
-          element={<MainPage taskInstances={taskInstances} />}
+          element={<MainPage taskInstances={taskInstances} updateTaskInstance={updateTaskInstance}/>}
         />
         <Route
           path="/new"

@@ -54,3 +54,10 @@ def get_task_instances_by_task(request, pk):
         user_task_instances = TaskInstance.objects.filter(task_id=pk)
         serializer = TaskInstanceSerializer(user_task_instances, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_task_instances(request, pk):
+        taskInstance = get_object_or_404(TaskInstance, pk=pk)
+        serializer = TaskInstanceSerializer(taskInstance)
+        return Response(serializer.data, status=status.HTTP_200_OK)

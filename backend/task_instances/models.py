@@ -9,6 +9,8 @@ class TaskInstance(models.Model):
     task = models.ForeignKey(Task, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     date_to_be_completed = models.DateField()
+    importance = models.IntegerField()
+    recurring_pattern = models.IntegerField()
     is_completed = models.BooleanField()
 
     

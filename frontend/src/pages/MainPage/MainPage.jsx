@@ -4,7 +4,11 @@ import TaskTable from "../../components/TaskTable/TaskTable";
 const MainPage = (props) => {
   return (
     <div>
-      <TaskTable taskInstances={props.taskInstances}/>
+      <span>
+        <TaskTable taskInstances={props.taskInstances} recurring_pattern={1} updateTaskInstance={props.updateTaskInstance}/>
+        <TaskTable taskInstances={props.taskInstances} recurring_pattern={2} updateTaskInstance={props.updateTaskInstance}/>
+        <TaskTable taskInstances={props.taskInstances} recurring_pattern={3} updateTaskInstance={props.updateTaskInstance}/>
+      </span>
     </div>
   );
 };
