@@ -91,6 +91,8 @@ function App() {
         task_id: refrenceTask.id,
         name: refrenceTask.name,
         date_to_be_completed: finalDate.toJSON().slice(0, 10),
+        importance: refrenceTask.importance,
+        recurring_pattern: 1,
         is_completed: false,
       };
 
@@ -113,6 +115,8 @@ function App() {
         task_id: refrenceTask.id,
         name: refrenceTask.name,
         date_to_be_completed: finalDate.toJSON().slice(0, 10),
+        importance: refrenceTask.importance,
+        recurring_pattern: 2,
         is_completed: false,
       };
 
@@ -158,18 +162,7 @@ function App() {
         { headers: { Authorization: "Bearer " + token } }
       );
       console.log(response);
-    } catch (error) {
-      console.log(error.message);
-    }
-  }
-
-  async function getTaskInstance(pk) {
-    try {
-      let response = await axios.get(
-        "http://127.0.0.1:8000/api/taskInstances/userTaskInstances/",
-        { headers: { Authorization: "Bearer " + token } }
-      );
-      setTaskInstances(response.data);
+      getAllTaskInstances()
     } catch (error) {
       console.log(error.message);
     }

@@ -22,20 +22,19 @@ const TaskTable = (props) => {
 
   return (
     <div>
-      <h1>Task Table</h1>
       <table>
         <tbody>
           {props.taskInstances
             .filter((taskInstanceToFilter) => {
               if (
                 taskInstanceToFilter.recurring_pattern ===
-                props.recurring_pattern
+                props.recurring_pattern && taskInstanceToFilter.is_completed === props.isCompleted
               ) {
                 return true;
               }
-              // else if(taskInstanceToFilter.is_completed === props.is_completed){
-              //     return true;
-              // }
+              else if(props.recurring_pattern === 0 && taskInstanceToFilter.is_completed === props.isCompleted){
+                  return true;
+              }
               else {
                 return false;
               }
