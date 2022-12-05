@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const TaskTable = (props) => {
+const TaskInstanceTable = (props) => {
   function completionToggle(taskInstance) {
     let updatedCompletion;
     console.log("Before change", taskInstance);
@@ -59,4 +59,4 @@ const TaskTable = (props) => {
   );
 };
 
-export default TaskTable;
+export default TaskInstanceTable;
