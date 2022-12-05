@@ -4,13 +4,13 @@ import "./App.css";
 import axios from "axios";
 import useAuth from "./hooks/useAuth";
 
-
 // Pages Imports
 import HomePage from "./pages/HomePage/HomePage";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import RegisterPage from "./pages/RegisterPage/RegisterPage";
 import MainPage from "./pages/MainPage/MainPage";
 import NewTaskPage from "./pages/NewTaskPage/NewTaskPage";
+import EditPage from "./pages/EditPage/EditPage";
 
 // Component Imports
 import Navbar from "./components/NavBar/NavBar";
@@ -23,9 +23,11 @@ import { useEffect, useState } from "react";
 function App() {
   const [user, token] = useAuth();
   const [taskInstances, setTaskInstances] = useState([]);
+  const [tasks, setTasks] = useState([]);
 
   useEffect(() => {
-    getAllTaskInstances()
+    getAllTaskInstances();
+    getAllTasks();
   }, []);
 
   async function getAllTaskInstances() {
@@ -35,6 +37,18 @@ function App() {
         { headers: { Authorization: "Bearer " + token } }
       );
       setTaskInstances(response.data);
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
+  async function getAllTasks() {
+    try {
+      let response = await axios.get(
+        "http://127.0.0.1:8000/api/tasks/userTasks/",
+        { headers: { Authorization: "Bearer " + token } }
+      );
+      setTasks(response.data);
     } catch (error) {
       console.log(error.message);
     }
@@ -50,6 +64,20 @@ function App() {
       );
       console.log(response);
       createTaskInstances(response.data);
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
+  async function deleteTask(pk) {
+    console.log("Task to DELETE", pk);
+    try {
+      let response = await axios.delete(
+        `http://127.0.0.1:8000/api/tasks/userTasks/${pk}/`,
+        { headers: { Authorization: "Bearer " + token } }
+      );
+      console.log(response);
+      getAllTasks();
     } catch (error) {
       console.log(error.message);
     }
@@ -163,7 +191,7 @@ function App() {
         { headers: { Authorization: "Bearer " + token } }
       );
       console.log(response);
-      getAllTaskInstances()
+      getAllTaskInstances();
     } catch (error) {
       console.log(error.message);
     }
@@ -199,14 +227,23 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route
           path="/main"
-          element={<MainPage taskInstances={taskInstances} updateTaskInstance={updateTaskInstance}/>}
+          element={
+            <MainPage
+              taskInstances={taskInstances}
+              updateTaskInstance={updateTaskInstance}
+            />
+          }
         />
         <Route
           path="/new"
           element={<NewTaskPage postNewTask={postNewTask} />}
         />
+        <Route
+          path="/edit"
+          element={<EditPage deleteTask={deleteTask} allTasks={tasks} />}
+        />
       </Routes>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }
