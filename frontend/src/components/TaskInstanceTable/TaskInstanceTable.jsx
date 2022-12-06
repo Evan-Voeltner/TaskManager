@@ -17,7 +17,6 @@ const TaskInstanceTable = (props) => {
     console.log("After change", taskInstance.is_completed);
 
     props.updateTaskInstance(taskInstance);
-    
   }
 
   return (
@@ -28,21 +27,29 @@ const TaskInstanceTable = (props) => {
             .filter((taskInstanceToFilter) => {
               if (
                 taskInstanceToFilter.recurring_pattern ===
-                props.recurring_pattern && taskInstanceToFilter.is_completed === props.isCompleted
+                  props.recurring_pattern &&
+                taskInstanceToFilter.is_completed === props.isCompleted
               ) {
                 return true;
-              }
-              else if(props.recurring_pattern === 0 && taskInstanceToFilter.is_completed === props.isCompleted){
-                  return true;
-              }
-              else {
+              } else if (
+                props.recurring_pattern === 0 &&
+                taskInstanceToFilter.is_completed === props.isCompleted
+              ) {
+                return true;
+              } else {
                 return false;
               }
+            })
+            .sort((a, b) => {
+              if (a.importance < b.importance) return 1;
+              if (a.importance > b.importance) return -1;
+              return 0;
             })
             .map((taskInstance) => {
               return (
                 <tr>
                   <td>{taskInstance.name}</td>
+                  <td>{taskInstance.importance}</td>
                   <td>{taskInstance.date_to_be_completed}</td>
                   <td>
                     <input

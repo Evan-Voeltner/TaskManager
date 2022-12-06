@@ -108,6 +108,8 @@ function App() {
         task_id: refrenceTask.id,
         name: refrenceTask.name,
         date_to_be_completed: refrenceTask.recurring_pattern.Date,
+        importance: refrenceTask.importance,
+        recurring_pattern: 1,
         is_completed: false,
       };
       postNewTaskInstance(newTaskInstance);
