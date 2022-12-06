@@ -49,8 +49,13 @@ const CreateTaskForm = (props) => {
       recurring_pattern: finalPattern,
       importance: importance,
     };
-
-    props.postNewTask(newTask);
+    if(props.editTask === true){
+      props.updateTask(newTask)
+    }
+    else{
+      props.postNewTask(newTask);
+    }
+    
   }
 
   return (

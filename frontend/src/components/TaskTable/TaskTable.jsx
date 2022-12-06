@@ -15,6 +15,11 @@ const TaskTable = (props) => {
                     onClick={props.deleteTask.bind(this, task.id)}
                     value="Delete"
                   />
+                  <input
+                    type="button"
+                    onClick={props.navigateToEditPage.bind(this, task)}
+                    value="Edit Task"
+                  />
                 </td>
               </tr>
             );

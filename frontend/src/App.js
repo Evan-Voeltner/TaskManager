@@ -1,8 +1,9 @@
 // General Imports
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import "./App.css";
 import axios from "axios";
 import useAuth from "./hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 // Pages Imports
 import HomePage from "./pages/HomePage/HomePage";
@@ -10,6 +11,7 @@ import LoginPage from "./pages/LoginPage/LoginPage";
 import RegisterPage from "./pages/RegisterPage/RegisterPage";
 import MainPage from "./pages/MainPage/MainPage";
 import NewTaskPage from "./pages/NewTaskPage/NewTaskPage";
+import TaskPage from "./pages/TaskPage/TaskPage";
 import EditPage from "./pages/EditPage/EditPage";
 
 // Component Imports
@@ -24,6 +26,8 @@ function App() {
   const [user, token] = useAuth();
   const [taskInstances, setTaskInstances] = useState([]);
   const [tasks, setTasks] = useState([]);
+  const [currentTask, setCurrentTask] = useState([]);
+  let navigate = useNavigate();
 
   useEffect(() => {
     getAllTaskInstances();
@@ -64,9 +68,16 @@ function App() {
       );
       console.log(response);
       createTaskInstances(response.data);
+      navigate("/main");
     } catch (error) {
       console.log(error.message);
     }
+  }
+
+  async function updateTask(updatedTask){
+    deleteTask(currentTask.id);
+    postNewTask(updatedTask);
+    navigate("/main");
   }
 
   async function deleteTask(pk) {
@@ -211,6 +222,11 @@ function App() {
     }
   }
 
+  function navigateToEditPage(currentTask) {
+    setCurrentTask(currentTask);
+    navigate("/edit");
+  }
+
   return (
     <div>
       <Navbar />
@@ -239,8 +255,12 @@ function App() {
           element={<NewTaskPage postNewTask={postNewTask} />}
         />
         <Route
+          path="/task"
+          element={<TaskPage deleteTask={deleteTask} allTasks={tasks} navigateToEditPage={navigateToEditPage}/>}
+        />
+        <Route
           path="/edit"
-          element={<EditPage deleteTask={deleteTask} allTasks={tasks} />}
+          element={<EditPage postNewTask={postNewTask}  updateTask={updateTask}/>}
         />
       </Routes>
       {/* <Footer /> */}

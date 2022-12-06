@@ -1,12 +1,10 @@
-import React, { useState } from "react";
-import TaskTable from "../../components/TaskTable/TaskTable";
-
+import React, { useState } from 'react';
+import CreateTaskForm from '../../components/CreateTaskForm/CreateTaskForm';
 const EditPage = (props) => {
-  return(
+    return ( 
     <div>
-      <TaskTable deleteTask={props.deleteTask} allTasks={props.allTasks}/>
-    </div>
-  );
-};
-
+        <CreateTaskForm postNewTask={props.postNewTask}  updateTask={props.updateTask} editTask={true}/>
+    </div> );
+}
+ 
 export default EditPage;
