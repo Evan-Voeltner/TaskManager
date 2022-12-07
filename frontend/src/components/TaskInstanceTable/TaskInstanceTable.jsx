@@ -1,6 +1,41 @@
 import React, { useState } from "react";
 
 const TaskInstanceTable = (props) => {
+  function determineDisplay(taskInstanceDate) {
+    let currentDate = new Date();
+    console.log(taskInstanceDate)
+    let taskInstanceDateArray = taskInstanceDate.split("-")
+    console.log(taskInstanceDateArray)
+
+
+    if (props.recurring_pattern === 1) {
+      console.log("Daily Task Comparison ", taskInstanceDate, " === ", currentDate)
+      if (taskInstanceDate === currentDate.toJSON().slice(0, 10)) {
+        return true;
+      }
+    } else if (props.recurring_pattern === 2) {
+      console.log("Full Year" ,currentDate.getFullYear().toString())
+      console.log("Full Year" ,taskInstanceDateArray[0])
+      console.log("Full Month" , (currentDate.getMonth()+ 1).toString())
+      console.log("Full Date" , (taskInstanceDateArray[2]).toString())
+      if (
+        taskInstanceDateArray[0] === currentDate.getFullYear().toString() &&
+        taskInstanceDateArray[1] === (currentDate.getMonth()+ 1).toString() &&
+        taskInstanceDateArray[2] >= currentDate.getDate() &&
+        (taskInstanceDateArray[2] - 7) <= currentDate.getDate()
+      ) {
+        return true;
+      }
+    } else if (props.recurring_pattern === 3) {
+      if (
+        taskInstanceDateArray[0] === currentDate.getFullYear().toString() &&
+        taskInstanceDateArray[1] === (currentDate.getMonth()+ 1).toString()
+      ) {
+        return true;
+      }
+    }
+  }
+
   function completionToggle(taskInstance) {
     let updatedCompletion;
     console.log("Before change", taskInstance);
@@ -30,7 +65,9 @@ const TaskInstanceTable = (props) => {
                   props.recurring_pattern &&
                 taskInstanceToFilter.is_completed === props.isCompleted
               ) {
-                return true;
+                if (determineDisplay(taskInstanceToFilter.date_to_be_completed)) {
+                  return true;
+                }
               } else if (
                 props.recurring_pattern === 0 &&
                 taskInstanceToFilter.is_completed === props.isCompleted
@@ -62,6 +99,7 @@ const TaskInstanceTable = (props) => {
             })}
         </tbody>
       </table>
+      <div></div>
     </div>
   );
 };
