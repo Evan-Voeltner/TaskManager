@@ -144,7 +144,7 @@ const TaskInstanceTable = (props) => {
 
   return (
     <div>
-      <table>
+      <table className="table table-sm">
         <tbody>
           {props.taskInstances
             .filter((taskInstanceToFilter) => {
@@ -178,7 +178,7 @@ const TaskInstanceTable = (props) => {
               return (
                 <tr>
                   <td>{taskInstance.name}</td>
-                  <td>{taskInstance.importance}</td>
+                  {/* <td>{taskInstance.importance}</td> */}
                   <td>{taskInstance.date_to_be_completed}</td>
                   <td>
                     <input
