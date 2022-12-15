@@ -144,7 +144,7 @@ const TaskInstanceTable = (props) => {
 
   return (
     <div>
-      <table className="table table-sm">
+      <table className="table table-sm table-bordered border-dark ">
         <tbody>
           {props.taskInstances
             .filter((taskInstanceToFilter) => {

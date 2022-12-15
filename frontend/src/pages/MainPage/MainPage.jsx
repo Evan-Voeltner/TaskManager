@@ -6,7 +6,7 @@ import dayGridPlugin from "@fullcalendar/daygrid"; // a plugin!
 
 const MainPage = (props) => {
   return (
-    <div style={{'margin': 100}}>
+    <div style={{ margin: 100 }}>
       <div className="row">
         <div className="col">
           <h1>Daily</h1>
@@ -51,7 +51,10 @@ const MainPage = (props) => {
               return { title: event.name, date: event.date_to_be_completed };
             })}
         />
-        <div className="row justify-content-center">
+        <div
+          className="row justify-content-center"
+          style={{ "margin-top": 20, "margin-left": 250, "margin-right": 250 }}
+        >
           <div className="col">
             <h1>Completed Tasks</h1>
             <TaskInstanceTable

@@ -2,8 +2,8 @@ import React, { useState } from "react";
 
 const TaskTable = (props) => {
   return (
-    <div>
-      <table>
+    <div style={{ "margin-top": 50, "margin-left": 500, "margin-right": 500 }}>
+      <table className="table table-sm table-bordered border-dark ">
         <tbody>
           {props.allTasks.map((task) => {
             return (
