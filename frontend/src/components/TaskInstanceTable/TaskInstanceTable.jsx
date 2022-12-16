@@ -193,11 +193,12 @@ const TaskInstanceTable = (props) => {
             .map((taskInstance) => {
               return (
                 <tr>
-                  <td>{taskInstance.name}</td>
+                  <td data-test="task-name">{taskInstance.name}</td>
                   {/* <td>{taskInstance.importance}</td> */}
                   <td>{taskInstance.date_to_be_completed}</td>
                   <td>
                     <input
+                      data-test="task-completion-toggle"
                       type="checkbox"
                       onClick={completionToggle.bind(this, taskInstance)}
                     />

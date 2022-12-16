@@ -1,6 +1,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import useAuth from "../../hooks/useAuth";
+import { Link } from "react-router-dom";
 
 import axios from "axios";
 
@@ -24,17 +25,15 @@ const HomePage = () => {
         console.log(error.response.data);
       }
     };
+    
     fetchCars();
   }, [token]);
   return (
     <div className="container">
-      <h1>Home Page for {user.username}!</h1>
-      {cars &&
-        cars.map((car) => (
-          <p key={car.id}>
-            {car.year} {car.model} {car.make}
-          </p>
-        ))}
+      <h1>Welcome {user.username}!</h1>
+      <button className="btn btn-primary" >
+          <Link to="/main">Go To Main Page</Link>
+        </button>
     </div>
   );
 };

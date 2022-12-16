@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import TaskInstanceTable from "../../components/TaskInstanceTable/TaskInstanceTable";
+import { Link } from "react-router-dom";
 
 import FullCalendar from "@fullcalendar/react"; // must go before plugins
 import dayGridPlugin from "@fullcalendar/daygrid"; // a plugin!
@@ -7,6 +8,14 @@ import dayGridPlugin from "@fullcalendar/daygrid"; // a plugin!
 const MainPage = (props) => {
   return (
     <div style={{ margin: 100 }}>
+      <div>
+        <button className="btn btn-success" style={{"margin-bottom": 10}}>
+          <Link to="/new">New</Link>
+        </button>
+        <button className="btn btn-primary" style={{"margin-left": 10, "margin-bottom": 10}}>
+          <Link to="/task">Edit</Link>
+        </button>
+      </div>
       <div className="row">
         <div className="col">
           <h1>Daily</h1>
@@ -36,6 +45,7 @@ const MainPage = (props) => {
           />
         </div>
       </div>
+      
       <div>
         <FullCalendar
           plugins={[dayGridPlugin]}

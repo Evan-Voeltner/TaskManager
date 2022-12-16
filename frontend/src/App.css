@@ -27,6 +27,14 @@ button {
   padding: 0.5rem 0.5rem;
 }
 
+a:visited {
+  color: white;
+}
+
+a:hover {
+  color: white;
+}
+
 button:hover {
   cursor: pointer;
   color: white;

@@ -1,11 +1,12 @@
 import React, { useState } from "react";
+import "./CreateTaskForm.css";
 
 const CreateTaskForm = (props) => {
-  const [name, setName] = useState('');
-  const [importance, setImportance] = useState('1');
+  const [name, setName] = useState("");
+  const [importance, setImportance] = useState("1");
   const [date, setDate] = useState([]);
   const [isRecurring, setIsRecurring] = useState(false);
-  const [recurringPattern, setRecurringPattern] = useState('0');
+  const [recurringPattern, setRecurringPattern] = useState("0");
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -17,55 +18,58 @@ const CreateTaskForm = (props) => {
 
     let finalPattern = {};
 
-    if(recurringPattern === '0'){
+    if (recurringPattern === "0") {
       finalPattern = {
         type: 0,
         Date: date,
-      }
-    }
-    else if(recurringPattern === '1'){
+      };
+    } else if (recurringPattern === "1") {
       finalPattern = {
         type: 1,
         Date: date,
-      }
-    }
-    else if(recurringPattern === '2'){
+      };
+    } else if (recurringPattern === "2") {
       finalPattern = {
         type: 2,
         Date: date,
-      }
-    }
-    else if(recurringPattern === '3'){
+      };
+    } else if (recurringPattern === "3") {
       finalPattern = {
         type: 3,
         Date: date,
-      }
+      };
     }
-    console.log(finalPattern)
-    
+    console.log(finalPattern);
+
     let newTask = {
       name: name,
       is_recurring: isRecurring,
       recurring_pattern: finalPattern,
       importance: importance,
     };
-    if(props.editTask === true){
-      props.updateTask(newTask)
-    }
-    else{
+    if (props.editTask === true) {
+      props.updateTask(newTask);
+    } else {
       props.postNewTask(newTask);
     }
-    
   }
 
   return (
-    <div>
+    <div className="center">
+      <h1>Enter task information</h1>
+      <br />
       <form onSubmit={handleSubmit}>
         <label>Task Name</label>
-        <input type="text" onChange={(event) => setName(event.target.value)} />
-
-        <p>Level Of Importance</p>
+        <input
+          type="text"
+          onChange={(event) => setName(event.target.value)}
+          data-test="name"
+        />
+        <br />
+        <br />
+        <label>Level Of Importance</label>
         <select
+          data-test="importance"
           name="Importance"
           onChange={(event) => setImportance(event.target.value)}
         >
@@ -73,13 +77,20 @@ const CreateTaskForm = (props) => {
           <option value={"2"}>Medium</option>
           <option value={"3"}>High</option>
         </select>
-
-        <p>When does it need to be completed</p>
-        <input type="date" onChange={(event) => setDate(event.target.value)}/>
-
-        <p>Recurring</p>
+        <br />
+        <br />
+        <label>When does it need to be completed?</label>
+        <input
+          type="date"
+          onChange={(event) => setDate(event.target.value)}
+          data-test="date"
+        />
+        <br />
+        <br />
+        <label>Does it Recur?</label>
         <div>
           <input
+            data-test="recur-yes"
             type="radio"
             name="isRecurring"
             value={true}
@@ -87,6 +98,7 @@ const CreateTaskForm = (props) => {
           />
           <label htmlFor="isRecurring">Yes</label>
           <input
+            data-test="recur-no"
             type="radio"
             name="isRecurring"
             value={false}
@@ -94,9 +106,10 @@ const CreateTaskForm = (props) => {
           />
           <label htmlFor="isRecurring">No</label>
         </div>
-
-        <p>When does it recurr</p>
+        <br />
+        <label>When does it Recur?</label>
         <select
+          data-test="recurring-pattern"
           name="Recurring"
           onChange={(event) => setRecurringPattern(event.target.value)}
         >
@@ -105,9 +118,12 @@ const CreateTaskForm = (props) => {
           <option value={"2"}>Weekly</option>
           <option value={"3"}>Monthly</option>
         </select>
-
+        <br />
+        <br />
         <div>
-          <button type="submit">Submit</button>
+          <button data-test="submit" type="submit" className="btn btn-success">
+            Submit
+          </button>
         </div>
       </form>
     </div>
