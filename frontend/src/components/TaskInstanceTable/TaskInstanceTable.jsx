@@ -12,16 +12,23 @@ const TaskInstanceTable = (props) => {
         "Daily Task Comparison ",
         taskInstanceDate,
         " === ",
-        currentDate
+        currentDate.toJSON().slice(0, 10)
       );
       if (taskInstanceDate === currentDate.toJSON().slice(0, 10)) {
+        console.log(
+          "Current Date Before Filter",
+          currentDate.toJSON().slice(0, 10)
+        );
+        console.log("Task Date Before Filter", taskInstanceDate);
         return true;
       }
     } else if (props.recurring_pattern === 2) {
-      console.log("Full Year", currentDate.getFullYear().toString());
-      console.log("Full Year", taskInstanceDateArray[0]);
-      console.log("Full Month", (currentDate.getMonth() + 1).toString());
-      console.log("Full Date", taskInstanceDateArray[2].toString());
+      // console.log("Current Year", currentDate.getFullYear().toString());
+      // console.log("Task Year", taskInstanceDateArray[0]);
+      // console.log("Current Month", (currentDate.getMonth() + 1).toString());
+      // console.log("Current Date", currentDate.getDate().toString());
+      // console.log("Task Date", taskInstanceDateArray[2].toString());
+
       if (
         taskInstanceDateArray[0] === currentDate.getFullYear().toString() &&
         taskInstanceDateArray[1] === (currentDate.getMonth() + 1).toString() &&
@@ -64,7 +71,10 @@ const TaskInstanceTable = (props) => {
         }
       ).length;
 
-      return (totalCompleteTaskInstances / totalTaskInstances) * 100;
+      let finalPrecentage = Math.round(
+        (totalCompleteTaskInstances / totalTaskInstances) * 100
+      );
+      return finalPrecentage.toString() + "%";
     } else if (props.recurring_pattern === 2) {
       let thisWeeksTaskInstancesArray = props.taskInstances.filter(
         (taskInstanceToFilter) => {
@@ -93,7 +103,10 @@ const TaskInstanceTable = (props) => {
         }
       ).length;
 
-      return (totalCompleteTaskInstances / totalTaskInstances) * 100;
+      let finalPrecentage = Math.round(
+        (totalCompleteTaskInstances / totalTaskInstances) * 100
+      );
+      return finalPrecentage.toString() + "%";
     } else if (props.recurring_pattern === 3) {
       let thisMonthsTaskInstancesArray = props.taskInstances.filter(
         (taskInstanceToFilter) => {
@@ -120,14 +133,17 @@ const TaskInstanceTable = (props) => {
         }
       ).length;
 
-      return (totalCompleteTaskInstances / totalTaskInstances) * 100;
+      let finalPrecentage = Math.round(
+        (totalCompleteTaskInstances / totalTaskInstances) * 100
+      );
+      return finalPrecentage.toString() + "%";
     }
   }
 
   function completionToggle(taskInstance) {
     let updatedCompletion;
-    console.log("Before change", taskInstance);
-    console.log("Before change", taskInstance.is_completed);
+    // console.log("Before change", taskInstance);
+    // console.log("Before change", taskInstance.is_completed);
 
     if (taskInstance.is_completed === false) {
       updatedCompletion = true;
@@ -136,8 +152,8 @@ const TaskInstanceTable = (props) => {
     }
 
     taskInstance.is_completed = updatedCompletion;
-    console.log("After change", taskInstance);
-    console.log("After change", taskInstance.is_completed);
+    // console.log("After change", taskInstance);
+    // console.log("After change", taskInstance.is_completed);
 
     props.updateTaskInstance(taskInstance);
   }
@@ -191,7 +207,9 @@ const TaskInstanceTable = (props) => {
             })}
         </tbody>
       </table>
-      <div>{determinePrecentageToCompletion()}%</div>
+      <div>
+        <h4>{determinePrecentageToCompletion()}</h4>
+      </div>
     </div>
   );
 };
